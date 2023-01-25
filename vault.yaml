@@ -1,0 +1,7 @@
+openai:
+  api_key: xxx
+training:
+  web_scraper:
+    page_limit: 500
+    urls:
+      - "https://example.com"

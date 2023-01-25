@@ -1,0 +1,40 @@
+triggers:
+  - catchall
+
+steps:
+  - flow_set:
+      question_entry_id: (@ flow.event.id )
+      question: (@ flow.event.data.text )
+  - typing: on
+
+  - question: (@ flow.question )
+    openai_integration: integration.openai
+    max_tokens: 250
+    top_k: 5
+
+  - say: (@ flow.answer )
+    markdown: true
+  - say: |
+      (% for source in flow.sources %)
+      * ##### (@ source )
+      (% endfor %)
+      ###### Powered by [GPT](https://docs.meya.ai/gpt). Was this response accurate or not?
+    markdown: true
+    quick_replies:
+      - icon: streamline-light/22-social-medias-rewards-rating/04-likes/like.svg
+        action:
+          flow_set:
+            rating: 1
+      - icon: streamline-light/22-social-medias-rewards-rating/04-likes/dislike.svg
+        action:
+          flow_set:
+            rating: -1
+
+  - track: answer.rating
+    data:
+      answer_rating: (@ flow.rating )
+      question_entry_id: (@ flow.question_entry_id )
+      question: (@ flow.question )
+      answer: (@ flow.answer )
+      sources: (@ flow.sources )
+      prompt: (@ flow.prompt )

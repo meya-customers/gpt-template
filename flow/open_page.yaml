@@ -1,0 +1,8 @@
+triggers:
+  - type: page_open
+    when: (@ not thread.open_page )
+
+steps:
+  - say: Hey, how can I help?
+  - thread_set:
+      open_page: true
