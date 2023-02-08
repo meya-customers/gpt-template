@@ -8,9 +8,9 @@ steps:
   - typing: on
 
   - question: (@ flow.question )
-    openai_integration: integration.openai
-    max_tokens: 250
-    top_k: 5
+    integration: integration.openai
+    max_tokens: 300
+    top_k: 8
 
   - say: (@ flow.answer )
     markdown: true
