@@ -12,6 +12,17 @@ steps:
     max_tokens: 300
     top_k: 8
 
+  - value: (@ flow.error )
+    case:
+      no_content:
+        jump: no_content
+      timeout:
+        jump: timeout
+      internal:
+        jump: error
+    default: next
+
+  - (answer)
   - say: (@ flow.answer )
     markdown: true
   - say: |
@@ -37,4 +48,16 @@ steps:
       question: (@ flow.question )
       answer: (@ flow.answer )
       sources: (@ flow.sources )
-      prompt: (@ flow.prompt )
+  - end
+
+  - (no_content)
+  - say: Sorry, I don't know how to answer that. Can you rephrase it?
+  - end
+
+  - (timeout)
+  - say: Sorry, I'm currently under heavy load, could you please try again later?
+  - end
+
+  - (error)
+  - say: There was an error, our engineers are looking into it. Please try again later.
+  - end
