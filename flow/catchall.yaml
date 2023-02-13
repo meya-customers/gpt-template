@@ -10,7 +10,7 @@ steps:
   - question: (@ flow.question )
     integration: integration.openai
     max_tokens: 300
-    top_k: 8
+    max_content_chunks: 8
 
   - value: (@ flow.error )
     case:
