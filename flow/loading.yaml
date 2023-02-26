@@ -1,0 +1,25 @@
+steps:
+  - flow_set:
+      count: 0
+
+  - (start)
+  - delay: 8
+
+  - if: (@ not thread.loading )
+    then: end
+    else: next
+
+  - flow_set:
+      count: (@ flow.count + 1 )
+
+  - if: (@ flow.count > 3 )
+    then:
+      jump: stop_loading
+    else: next
+
+  - typing: on
+  - jump: start
+
+  - (stop_loading)
+  - thread_set:
+      loading: false

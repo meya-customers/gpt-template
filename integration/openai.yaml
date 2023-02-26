@@ -1,2 +1,1 @@
 type: meya.openai.integration
-api_key: (@ vault.openai.api_key )
