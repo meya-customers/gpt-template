@@ -53,9 +53,13 @@ steps:
 
   - (sources)
   - say: |
+      (% if flow.sources %)
       (% for source in flow.sources %)
       * ##### (@ source )
       (% endfor %)
+      (% else %)
+      No public links are available for this answer, as it was sourced internally.
+      (% endif %)
     markdown: true
   - end
 
