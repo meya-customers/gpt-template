@@ -5,12 +5,21 @@ steps:
   - flow_set:
       question_entry_id: (@ flow.event.id )
       question: (@ flow.event.data.text )
+
+  - thread_set:
+      loading: true
+
   - typing: on
+  - flow: flow.loading
+    async: true
 
   - question: (@ flow.question )
     integration: integration.openai
     max_tokens: 300
     max_content_chunks: 8
+
+  - thread_set:
+      loading: false
 
   - value: (@ flow.error )
     case:
@@ -23,24 +32,38 @@ steps:
     default: next
 
   - (answer)
-  - say: (@ flow.answer )
-    markdown: true
   - say: |
-      (% for source in flow.sources %)
-      * ##### (@ source )
-      (% endfor %)
-      ###### Powered by [GPT](https://docs.meya.ai/gpt). Was this response accurate or not?
+      (@ flow.answer )
+      ###### Powered by [MeyaGPT](https://docs.meya.ai/gpt). Was this response accurate or not?
     markdown: true
     quick_replies:
+      - text: Sources
+        action:
+          jump: sources
       - icon: streamline-light/22-social-medias-rewards-rating/04-likes/like.svg
         action:
-          flow_set:
+          jump: rating
+          data:
             rating: 1
       - icon: streamline-light/22-social-medias-rewards-rating/04-likes/dislike.svg
         action:
-          flow_set:
+          jump: rating
+          data:
             rating: -1
 
+  - (sources)
+  - say: |
+      (% if flow.sources %)
+      (% for source in flow.sources %)
+      * ##### (@ source )
+      (% endfor %)
+      (% else %)
+      No public links are available for this answer, as it was sourced internally.
+      (% endif %)
+    markdown: true
+  - end
+
+  - (rating)
   - track: answer.rating
     data:
       answer_rating: (@ flow.rating )
@@ -48,6 +71,11 @@ steps:
       question: (@ flow.question )
       answer: (@ flow.answer )
       sources: (@ flow.sources )
+  - say: Thanks for your feedback!
+    quick_replies:
+      - text: Sources
+        action:
+          jump: sources
   - end
 
   - (no_content)
