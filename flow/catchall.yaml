@@ -34,7 +34,7 @@ steps:
   - (answer)
   - say: |
       (@ flow.answer )
-      ###### Powered by [MeyaGPT](https://docs.meya.ai/gpt). Was this response accurate or not?
+      ###### Powered by [MeyaGPT](https://www.meya.ai/product/meyagpt). Was this response accurate or not?
     markdown: true
     quick_replies:
       - text: Sources
